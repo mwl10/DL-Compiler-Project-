@@ -8,7 +8,7 @@ from dl.lexer import DLLexer
 
 class TestLexer(unittest.TestCase):
 
-    def test_tokens_single_character(self):
+    def test_tokens_single_operator(self):
         lexer = DLLexer()
         tokens = list(lexer.tokenize('; , + - / * ( ) { } [ ]'))
 
@@ -137,6 +137,7 @@ class TestLexer(unittest.TestCase):
         source_string = source_file.read()
 
         tokens = list(lexer.tokenize(source_string))
+        source_file.close()
 
         self.assertEqual(lexer.lineno, 17)
 

@@ -43,7 +43,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Print(BinOp(PLUSOP, Variable(x), Variable(y)))))")
 
-    @unittest.skip("Assignment statements not implemented yet")
     def test_parse_assignment_statement(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -54,7 +53,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), Integer(5))))")
 
-    @unittest.skip("Assignment statements not implemented yet")
     def test_parse_addition_assignment(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -65,7 +63,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), BinOp(PLUSOP, Integer(2), Integer(3)))))")
 
-    @unittest.skip("Assignment statements not implemented yet")
     def test_parse_subtraction_assignment(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -76,7 +73,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), BinOp(MINUSOP, Integer(4), Integer(3)))))")
 
-    @unittest.skip("Assignment statements not implemented yet")
     def test_parse_multiplication_assignment(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -87,7 +83,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), BinOp(MULTIPLYOP, Integer(4), Integer(5)))))")
 
-    @unittest.skip("Assignment statements not implemented yet")
     def test_parse_division_assignment(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -98,7 +93,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), BinOp(DIVIDEOP, Integer(10), Integer(2)))))")
 
-    @unittest.skip("Assignment to array elements not implemented yet")
     def test_parse_assignment_statement_to_array_constant(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -109,7 +103,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(ArrayIndex(Variable(x), Integer(1)), Integer(5))))")
 
-    @unittest.skip("Assignment to array elements not implemented yet")
     def test_parse_assignment_statement_to_array_variable(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -120,7 +113,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(ArrayIndex(Variable(x), Variable(y)), Variable(z))))")
 
-    @unittest.skip("Assignment from array elements not implemented yet")
     def test_parse_assignment_statement_from_array_constant(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -131,7 +123,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), ArrayIndex(Variable(y), Integer(1)))))")
 
-    @unittest.skip("Assignment from array elements not implemented yet")
     def test_parse_assignment_statement_from_array_variable(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -142,7 +133,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), ArrayIndex(Variable(y), Variable(z)))))")
 
-    @unittest.skip("Read statement not implemented yet")
     def test_parse_read_statement(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -153,40 +143,36 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Read(Variable(x))))")
 
-    @unittest.skip("Return statement not implemented yet")
     def test_parse_return_statement_constant(self):
         lexer = DLLexer()
         parser = DLParser()
 
-        source_string = "{ return(2) }"
+        source_string = "{ return 2 }"
         tokens = lexer.tokenize(source_string)
         result = parser.parse(tokens)
 
         self.assertEqual(str(result), "Program(Block(Return(Integer(2))))")
 
-    @unittest.skip("Return statement not implemented yet")
     def test_parse_return_statement_variable(self):
         lexer = DLLexer()
         parser = DLParser()
 
-        source_string = "{ return(x) }"
+        source_string = "{ return x }"
         tokens = lexer.tokenize(source_string)
         result = parser.parse(tokens)
 
         self.assertEqual(str(result), "Program(Block(Return(Variable(x))))")
 
-    @unittest.skip("Return statement not implemented yet")
     def test_parse_return_statement_expression(self):
         lexer = DLLexer()
         parser = DLParser()
 
-        source_string = "{ return(x + 5) }"
+        source_string = "{ return x + 5 }"
         tokens = lexer.tokenize(source_string)
         result = parser.parse(tokens)
 
         self.assertEqual(str(result), "Program(Block(Return(BinOp(PLUSOP, Variable(x), Integer(5)))))")
 
-    @unittest.skip("If statement not implemented yet")
     def test_parse_if_statement(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -197,7 +183,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(If(RelOp(EQOP, Integer(1), Integer(1)), Block(Print(Integer(1))))))")
 
-    @unittest.skip("If statement not implemented yet")
     def test_parse_if_else_statement(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -208,7 +193,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(If(RelOp(EQOP, Integer(1), Integer(5)), Block(Print(Integer(1))), Block(Print(Integer(0))))))")
 
-    @unittest.skip("While statement not implemented yet")
     def test_parse_while_statement(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -219,7 +203,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(While(RelOp(EQOP, Integer(1), Integer(1)), Block(Print(Integer(1))))))")
 
-    @unittest.skip("While statement not implemented yet")
     def test_parse_not_equal_relop(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -230,7 +213,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(While(RelOp(NEOP, Integer(1), Integer(2)), Block(Print(Integer(2))))))")
 
-    @unittest.skip("While statement not implemented yet")
     def test_parse_less_than_relop(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -241,7 +223,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(While(RelOp(LTOP, Integer(2), Integer(3)), Block(Print(Integer(3))))))")
 
-    @unittest.skip("While statement not implemented yet")
     def test_parse_less_or_equal_relop(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -252,7 +233,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(While(RelOp(LEOP, Integer(3), Integer(4)), Block(Print(Integer(4))))))")
 
-    @unittest.skip("While statement not implemented yet")
     def test_parse_greater_than_relop(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -263,7 +243,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(While(RelOp(GTOP, Integer(5), Integer(4)), Block(Print(Integer(5))))))")
 
-    @unittest.skip("While statement not implemented yet")
     def test_parse_greater_or_equal_relop(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -274,7 +253,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(While(RelOp(GEOP, Integer(6), Integer(5)), Block(Print(Integer(6))))))")
 
-    @unittest.skip("Block as a statement not implemented yet")
     def test_parse_block_statement(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -285,7 +263,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Block(Print(Integer(1)))))")
 
-    @unittest.skip("Statement sequences not implemented yet")
     def test_parse_statement_sequence(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -296,7 +273,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), Integer(2)), Print(Variable(x))))")
 
-    @unittest.skip("Variable declarations not implemented yet")
     def test_parse_program_variable_declaration(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -312,7 +288,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Declarations(VariableDeclarations(INT, Variable(x))), Block(Assign(Variable(x), Integer(1))))")
 
-    @unittest.skip("Variable declaration sequences not implemented yet")
     def test_parse_program_variable_declaration_sequence(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -328,7 +303,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Declarations(VariableDeclarations(INT, Variable(x), Variable(y), Variable(z))), Block(Assign(Variable(x), Integer(1))))")
 
-    @unittest.skip("Array declarations not implemented yet")
     def test_parse_program_array_declaration(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -344,8 +318,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Declarations(VariableDeclarations(INT, ArrayIndex(Variable(x), Integer(10)))), Block(Assign(ArrayIndex(Variable(x), Integer(5)), Integer(1))))")
 
-
-    @unittest.skip("Function calls not implemented yet")
     def test_parse_function_call_constant(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -356,7 +328,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), FunctionCall(foo, Arguments(Integer(1))))))")
 
-    @unittest.skip("Function calls not implemented yet")
     def test_parse_function_call_variable(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -367,7 +338,6 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), FunctionCall(bar, Arguments(Variable(y))))))")
 
-    @unittest.skip("Function calls not implemented yet")
     def test_parse_function_call_multiple_arguments(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -378,14 +348,13 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Block(Assign(Variable(x), FunctionCall(baz, Arguments(Variable(y), Integer(1), Variable(z), Integer(2))))))")
 
-    @unittest.skip("Function declarations not implemented yet")
     def test_parse_function_declaration_no_arguments(self):
         lexer = DLLexer()
         parser = DLParser()
 
         source_string = """
             /* Declare a function named 'foo', with no arguments. */
-            foo(); { return(5); }
+            foo(); { return 5; }
 
             /* Call 'foo' in the main body of the program. */
             {
@@ -397,14 +366,13 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual(str(result), "Program(Declarations(FunctionDeclaration(foo, Block(Return(Integer(5))))), Block(Assign(Variable(x), FunctionCall(foo))))")
 
-    @unittest.skip("Function declarations not implemented yet")
     def test_parse_function_declaration_one_argument(self):
         lexer = DLLexer()
         parser = DLParser()
 
         source_string = """
             /* Declare a function named 'bar', with one argument. */
-            bar(x); { return(x * 10); }
+            bar(x); { return x * 10; }
 
             /* Call 'bar' in the main body of the program. */
             {
@@ -419,7 +387,6 @@ class TestParser(unittest.TestCase):
         self.assertEqual(str(result.body), "Block(Assign(Variable(y), FunctionCall(bar, Arguments(Integer(5)))))")
 
 
-    @unittest.skip("Function declarations not implemented yet")
     def test_parse_function_declaration_with_variables(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -429,7 +396,7 @@ class TestParser(unittest.TestCase):
             baz();
             int x;
             {
-                return(x + 2)
+                return x + 2
             }
 
             /* Call 'baz' in the main body of the program. */
@@ -453,7 +420,6 @@ class TestParser(unittest.TestCase):
         self.assertEqual(str(func.body), "Block(Return(BinOp(PLUSOP, Variable(x), Integer(2))))")
 
 
-    @unittest.skip("Function declarations not implemented yet")
     def test_parse_function_declaration_with_arguments_and_variables(self):
         lexer = DLLexer()
         parser = DLParser()
@@ -464,7 +430,7 @@ class TestParser(unittest.TestCase):
             int y;
             {
                 y = 2;
-                return(x * y)
+                return x * y
             }
 
             /* Call 'buz' in the main body of the program. */
@@ -479,8 +445,6 @@ class TestParser(unittest.TestCase):
         self.assertEqual(str(result.declarations), "Declarations(FunctionDeclaration(buz, Arguments(Variable(x)), VariableDeclarations(INT, Variable(y)), Block(Assign(Variable(y), Integer(2)), Return(BinOp(MULTIPLYOP, Variable(x), Variable(y))))))")
         self.assertEqual(str(result.body), "Block(Assign(Variable(z), FunctionCall(buz, Arguments(Integer(3)))))")
 
-
-    @unittest.skip("Necessary productions not implemented yet")
     def test_parse_code_example(self):
         lexer = DLLexer()
         parser = DLParser()
