@@ -5,8 +5,8 @@ from distutils.core import setup
 setup(name='DL',
       version='0.1',
       description="DL - Simple subset of C",
-      author = "Allison Randal",
-      author_email = "arandal@vassar.edu",
+      author = "Matthew Lowery // Jonah Tuckman",
+      author_email = "mlowery@vassar.edu // jttuckman@vassar.edu",
       url = "https://cs.vassar.edu/~cs331/",
       packages = ['dl'],
      )
