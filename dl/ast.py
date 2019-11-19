@@ -1,4 +1,18 @@
-class Expression:
+class ASTNode:
+    """Base class for all AST nodes.
+
+    Attributes:
+        itype -- an annotation of the inferred type of the node
+    """
+    def __init__(self):
+        self.itype = None
+
+    def set_itype(self, itype):
+        """Set the inferred type of the AST node."""
+        self.itype = itype
+
+
+class Expression(ASTNode):
     """Base class for all expression nodes.
 
     Attributes:
@@ -34,15 +48,15 @@ class ArrayIndex(Expression):
     """Array index node, for both read and write.
 
     Attributes:
-        name -- the array variable name
+        var -- the array variable
         index -- the array element to read or write
     """
-    def __init__(self, name, index):
-        self.name = name
+    def __init__(self, var, index):
+        self.var = var
         self.index = index
 
     def __repr__(self):
-        return "ArrayIndex(%s, %s)" % (self.name, self.index)
+        return "ArrayIndex(%s, %s)" % (self.var, self.index)
 
 class BinOp(Expression):
     """Binary operator node.
@@ -96,7 +110,7 @@ class FunctionCall(Expression):
         else:
             return "FunctionCall(%s)" % (self.name)
 
-class Arguments():
+class Arguments(ASTNode):
     """Node for a sequence of arguments to a function, in order.
 
     Attributes:
@@ -112,11 +126,15 @@ class Arguments():
         """Add an argument to the beginning of the argument list."""
         self.arguments.insert(0, argument)
 
+    def count(self):
+        """Count of how many arguments are in argument list."""
+        return len(self.arguments)
+
     def __repr__(self):
         display = "Arguments(" + ", ".join(map(str, self.arguments)) + ")"
         return display
 
-class Statement:
+class Statement(ASTNode):
     """Base class for all statement nodes.
 
     Attributes:
@@ -207,7 +225,7 @@ class While(Statement):
     def __repr__(self):
         return "While(%s, %s)" % (self.condition, self.body)
 
-class Block():
+class Block(ASTNode):
     """Node for a sequence of statements, in order.
 
     Attributes:
@@ -227,7 +245,7 @@ class Block():
         display = "Block(" + ", ".join(map(str, self.statements)) + ")"
         return display
 
-class Declarations():
+class Declarations(ASTNode):
     """Node for a sequence of declarations, in order.
 
     Attributes:
@@ -247,7 +265,7 @@ class Declarations():
         display = "Declarations(" + ", ".join(map(str, self.declarations)) + ")"
         return display
 
-class VariableDeclarations():
+class VariableDeclarations(ASTNode):
     """Node for a sequence of variable declarations, in order.
 
     Attributes:
@@ -275,7 +293,7 @@ class VariableDeclarations():
         display += ")"
         return display
 
-class FunctionDeclaration(Expression):
+class FunctionDeclaration(ASTNode):
     """Function declaration node.
 
     Attributes:
@@ -319,12 +337,12 @@ class FunctionDeclaration(Expression):
         else:
             return "FunctionDeclaration(%s, %s)" % (self.name, self.body)
 
-class Program():
+class Program(ASTNode):
     """Top-level node for a program.
 
     Attributes:
         body -- the body of the program
-        declarations -- an ordered list of declarations (optional)
+        declarations -- the variable and function declarations
     """
     def __init__(self, body, declarations=None):
         self.body = body
