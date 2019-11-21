@@ -42,7 +42,7 @@ class DLSemanticAnalyzer(ASTVisitor):
         # lookup the node.var.name in the symbol table
         symbol = self.st.find_symbol(node.var.name)
         # if the symbol is found and its
-        if symbol and isinstance(symbol, ArraySymbol):
+        if symbol and isinstance(node.var.type, ArraySymbol):
             node.set_itype(symbol.type)
         else:
             UndeclaredVariableError("Symbol not found or just isn't an ArraySymbol")
@@ -153,6 +153,13 @@ class DLSemanticAnalyzer(ASTVisitor):
 
     def visit_FunctionDeclaration(self, node):
         """Call the semantic analyzer for FunctionDeclaration AST nodes."""
+        #count = 0
+       # if node.args:
+        #    count = node.args.count()
+       #     self.visit(node.args)
+       # if count != nodeName.args:
+        #    UndeclaredFunctionError("Number of arguments in the function call isn't the same "
+
         arg_count = 0
         if node.args:
             arg_count = node.args.count()
@@ -161,8 +168,8 @@ class DLSemanticAnalyzer(ASTVisitor):
         # create a new scope in the symbol table for the function
         self.st.enter_scope()
         # iterate through the args, and add each one to the symbol table
-        for argument in node.args:
-            self.st.add_arg_symbol(argument, ArgumentSymbol) # symbol_name, symbol_type
+        for arguments in node.args: #### node.args not iterable?
+            self.st.add_arg_symbol(arguments, ArgumentSymbol) # symbol_name, symbol_type
         # if there are any variable declarations for the function
         if node.declarations:
             self.visit(node.vars)
