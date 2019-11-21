@@ -33,10 +33,9 @@ class DLSemanticAnalyzer(ASTVisitor):
         # should this be an and statement?
         if symbol and (isinstance(symbol, VariableSymbol) or isinstance(symbol, ArgumentSymbol)):
             # set inferred type of the node to the symbol.type (is this right?)
-            node.set_itype('symbol.type')
+            node.set_itype(symbol.type)
         else:
             UndeclaredVariableError("Symbol not found or just isn't a VariableSymbol or ArgumentSymbol")
-
 
     def visit_ArrayIndex(self, node):
         """Call the semantic analyzer for ArrayIndex AST nodes."""
@@ -44,7 +43,7 @@ class DLSemanticAnalyzer(ASTVisitor):
         symbol = self.st.find_symbol(node.var.name)
         # if the symbol is found and its
         if symbol and isinstance(symbol, ArraySymbol):
-            node.set_itype('symbol.type')
+            node.set_itype(symbol.type)
         else:
             UndeclaredVariableError("Symbol not found or just isn't an ArraySymbol")
 
@@ -54,12 +53,12 @@ class DLSemanticAnalyzer(ASTVisitor):
         self.visit(node.left)
         self.visit(node.right)
 
+
         # Check the types of the two arguments.
-        if node.left.itype == 'int' and node.right.itype == 'int':
-            node.set_itype('bool')
+        if (node.left.itype == 'int') and (node.right.itype == 'int'):
+            node.set_itype('int')
         else:
             raise TypeCheckError("Type of arguments to binary operator should be 'int': " + node.op)
-
 
     def visit_RelOp(self, node):
         """Call the semantic analyzer for RelOp AST nodes."""
@@ -72,7 +71,6 @@ class DLSemanticAnalyzer(ASTVisitor):
             node.set_itype('bool')
         else:
             raise TypeCheckError("Types of arguments to relational operator should be 'int' or 'bool': " + node.op)
-
 
     def visit_FunctionCall(self, node):
         """Call the semantic analyzer for FunctionCall AST nodes."""
@@ -153,8 +151,6 @@ class DLSemanticAnalyzer(ASTVisitor):
                 # if the declaration is an ArrayIndex, add a symbol to the symbol table
                 self.st.add_array_symbol(symbol_type, ArrayIndex)  # argument types:  symbol_name, symbol_type, size
 
-
-
     def visit_FunctionDeclaration(self, node):
         """Call the semantic analyzer for FunctionDeclaration AST nodes."""
         arg_count = 0
@@ -165,15 +161,14 @@ class DLSemanticAnalyzer(ASTVisitor):
         # create a new scope in the symbol table for the function
         self.st.enter_scope()
         # iterate through the args, and add each one to the symbol table
-        for arg in node.args:
-            self.st.add_arg_symbol(arg, ArgumentSymbol) # symbol_name, symbol_type
+        for argument in node.args:
+            self.st.add_arg_symbol(argument, ArgumentSymbol) # symbol_name, symbol_type
         # if there are any variable declarations for the function
         if node.declarations:
             self.visit(node.vars)
         self.visit(node.body)
         # exit the scope for the function
         self.st.exit_scope()
-
 
     def visit_Program(self, node):
         """Call the semantic analyzer for Program AST nodes."""
