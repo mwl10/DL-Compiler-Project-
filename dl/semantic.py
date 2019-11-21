@@ -28,26 +28,26 @@ class DLSemanticAnalyzer(ASTVisitor):
     def visit_Variable(self, node):
         """Call the semantic analyzer for Variable AST nodes."""
         # look up the node.name in the symbol table
-        symbol = self.st.find_symbol() # self , symbol name
-        # if the symbol is found, check
-        if symbol:
-            # if the symbol is found check if the returned symbol is a VariableSymbol or an ArguementSymbol
-            if isinstance() # symbol type, ' symbol name '
-
-            elif
-
-            else:
-
-   # self.st.enter_scope()
-    #if node.declarations:
-     #   self.visit(node.declarations)
- #   self.visit(node.body)
- #   self.st.exit_scope()
+        symbol = self.st.find_symbol(node.name) # self , symbol name
+        # if the symbol is found check if the returned symbol is a VariableSymbol or an ArgumentSymbol
+        # should this be an and statement?
+        if symbol and (isinstance(symbol, VariableSymbol) or isinstance(symbol, ArgumentSymbol)):
+            # set inferred type of the node to the symbol.type (is this right?)
+            node.set_itype('symbol.type')
+        else:
+            UndeclaredVariableError("Symbol not found or just isn't a VariableSymbol or ArgumentSymbol")
 
 
     def visit_ArrayIndex(self, node):
         """Call the semantic analyzer for ArrayIndex AST nodes."""
-        pass
+        # lookup the node.var.name in the symbol table
+        symbol = self.st.find_symbol(node.var.name)
+        # if the symbol is found and its
+        if symbol and isinstance(symbol, ArraySymbol):
+            node.set_itype('symbol.type')
+        else:
+            UndeclaredVariableError("Symbol not found or just isn't an ArraySymbol")
+
     # same as visit_assignOp??????????
     def visit_BinOp(self, node):
         """Call the semantic analyzer for BinOp AST nodes."""
@@ -76,6 +76,16 @@ class DLSemanticAnalyzer(ASTVisitor):
 
     def visit_FunctionCall(self, node):
         """Call the semantic analyzer for FunctionCall AST nodes."""
+        # look up the node.name in the symbol table
+        nodeName = self.st.find_symbol(node.name)
+        # if the symbol is found
+        if nodeName:
+            isinstance(nodeName, FunctionSymbol)
+        elif not(nodeName) or not(isinstance(nodeName, FunctionSymbol)):
+            UndeclaredFunctionError("Symbol not found, or the symbol isn't a FunctionSymbol")
+
+
+
         pass
 
     def visit_Arguments(self, node):
@@ -133,10 +143,10 @@ class DLSemanticAnalyzer(ASTVisitor):
         # iterate through node.variables
         for variables in node.variables:
             # check if the type of each declaration is 'variable' or 'arrayindex'
-            if isinstance(symbol_type, 'variable'):
+            if isinstance(symbol_type, Variable):
                 # if the declaration is a variable, add symbol to the symbol table
                 self.st.add_var_symbol()    # argument types: self, symbol_name, symbol_type
-            elif isinstance(symbol_type, 'arrayindex'):
+            elif isinstance(symbol_type, ArrayIndex):
                 # if the declaration is an ArrayIndex, add a symbol to the symbol table
                 self.st.add_array_symbol()  # argument types: self, symbol_name, symbol_type, size
 
@@ -152,7 +162,7 @@ class DLSemanticAnalyzer(ASTVisitor):
             # create a new scope in the symbol table for the function
             self.st.enter_scope()
             # iterate through the args, and add each one to the symbol table
-            for args in node.args:
+            for arg in node.args:
                 self.st.add_arg_symbol() #self, symbol_name, symbol_type
             # if there are any variable declarations for the function
             if node.declarations:
