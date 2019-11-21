@@ -1,6 +1,6 @@
 from dl.visitor import ASTVisitor
 from dl.symbols import SymbolTable, VariableSymbol, ArgumentSymbol, ArraySymbol, FunctionSymbol
-
+import sys
 from dl.ast import Variable, ArrayIndex
 
 class DLSemanticAnalyzer(ASTVisitor):
@@ -28,7 +28,7 @@ class DLSemanticAnalyzer(ASTVisitor):
     def visit_Variable(self, node):
         """Call the semantic analyzer for Variable AST nodes."""
         # look up the node.name in the symbol table
-        symbol = self.st.find_symbol(node.name) # self , symbol name
+        symbol = self.st.find_symbol(node.name) # symbol name
         # if the symbol is found check if the returned symbol is a VariableSymbol or an ArgumentSymbol
         # should this be an and statement?
         if symbol and (isinstance(symbol, VariableSymbol) or isinstance(symbol, ArgumentSymbol)):
@@ -79,14 +79,17 @@ class DLSemanticAnalyzer(ASTVisitor):
         # look up the node.name in the symbol table
         nodeName = self.st.find_symbol(node.name)
         # if the symbol is found
-        if nodeName:
-            isinstance(nodeName, FunctionSymbol)
-        elif not(nodeName) or not(isinstance(nodeName, FunctionSymbol)):
+        if nodeName and isinstance(nodeName, FunctionSymbol):
+            node.set_itype('int')
+        else:
             UndeclaredFunctionError("Symbol not found, or the symbol isn't a FunctionSymbol")
-
-
-
-        pass
+        # node.args might be undefined so first instantiate a count variable to zero and compare
+        count = 0
+        if node.args:
+            count = node.args.count()
+            self.visit(node.args)
+        if count != nodeName.args:
+            UndeclaredFunctionError("Number of arguments in the function call isn't the same ")
 
     def visit_Arguments(self, node):
         """Call the semantic analyzer for Arguments AST nodes."""
@@ -141,14 +144,14 @@ class DLSemanticAnalyzer(ASTVisitor):
         """Call the semantic analyzer for VariableDeclarations AST nodes."""
         symbol_type = node.var_type.lower()
         # iterate through node.variables
-        for variables in node.variables:
+        for variable in node.variables:
             # check if the type of each declaration is 'variable' or 'arrayindex'
             if isinstance(symbol_type, Variable):
                 # if the declaration is a variable, add symbol to the symbol table
-                self.st.add_var_symbol()    # argument types: self, symbol_name, symbol_type
+                self.st.add_var_symbol(symbol_type, Variable)    # argument types:  symbol_name, symbol_type
             elif isinstance(symbol_type, ArrayIndex):
                 # if the declaration is an ArrayIndex, add a symbol to the symbol table
-                self.st.add_array_symbol()  # argument types: self, symbol_name, symbol_type, size
+                self.st.add_array_symbol(symbol_type, ArrayIndex)  # argument types:  symbol_name, symbol_type, size
 
 
 
@@ -157,19 +160,19 @@ class DLSemanticAnalyzer(ASTVisitor):
         arg_count = 0
         if node.args:
             arg_count = node.args.count()
-            # add a symbol to the symbol table for the function
-            self.st.add_func_symbol() #self, symbol_name, size how to get the name
-            # create a new scope in the symbol table for the function
-            self.st.enter_scope()
-            # iterate through the args, and add each one to the symbol table
-            for arg in node.args:
-                self.st.add_arg_symbol() #self, symbol_name, symbol_type
-            # if there are any variable declarations for the function
-            if node.declarations:
-                self.visit(node.vars)
-            self.visit(node.body)
-            # exit the scope for the function
-            self.st.exit_scope()
+        # add a symbol to the symbol table for the function
+        self.st.add_func_symbol(node.name, arg_count) # symbol_name, size how to get the name
+        # create a new scope in the symbol table for the function
+        self.st.enter_scope()
+        # iterate through the args, and add each one to the symbol table
+        for arg in node.args:
+            self.st.add_arg_symbol(arg, ArgumentSymbol) # symbol_name, symbol_type
+        # if there are any variable declarations for the function
+        if node.declarations:
+            self.visit(node.vars)
+        self.visit(node.body)
+        # exit the scope for the function
+        self.st.exit_scope()
 
 
     def visit_Program(self, node):

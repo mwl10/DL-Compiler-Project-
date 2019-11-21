@@ -23,7 +23,6 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(print_statement.arg.itype, "int")
 
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_print(self):
         with self.assertRaises(UndeclaredVariableError):
             ast = self.build_ast("{ print(a) }")
@@ -61,7 +60,6 @@ class TestGenerator(unittest.TestCase):
         print_statement = main_body.statements[0]
         # self.assertEqual(print_statement.arg.itype, "int")
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_addition(self):
         with self.assertRaises(UndeclaredVariableError):
             ast = self.build_ast("{ print(c + 1) }")
@@ -89,7 +87,6 @@ class TestGenerator(unittest.TestCase):
         # self.assertEqual(print_statement.arg.itype, "int")
 
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_assign(self):
         with self.assertRaises(UndeclaredVariableError):
             ast = self.build_ast("{ e = 1 }")
@@ -97,7 +94,6 @@ class TestGenerator(unittest.TestCase):
             result = analyzer.analyze(ast)
 
 
-    @unittest.skip("Inferred type for variables not implemented yet")
     def test_semantic_declared_variable_assign(self):
         source_string = """
             int f;
@@ -115,14 +111,12 @@ class TestGenerator(unittest.TestCase):
         assign_statement = main_body.statements[0]
         self.assertEqual(assign_statement.itype, "int")
 
-    @unittest.skip("Semantic check for undeclared arrays not implemented yet")
     def test_semantic_undeclared_array_assign(self):
         with self.assertRaises(UndeclaredVariableError):
             ast = self.build_ast("{ g[1] = 5 }")
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Inferred type for array index assignment not implemented yet")
     def test_semantic_declared_array_assign(self):
         source_string = """
             int h[10];
@@ -139,8 +133,7 @@ class TestGenerator(unittest.TestCase):
         main_body = result.body
         assign_statement = main_body.statements[0]
         self.assertEqual(assign_statement.left.itype, "int")
- 
-    @unittest.skip("Semantic check for undeclared arrays not implemented yet")
+
     def test_semantic_undeclared_array_assign_from(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -153,7 +146,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Inferred type for array index access not implemented yet")
     def test_semantic_declared_array_assign_from(self):
         source_string = """
             int k, l[20];
@@ -171,7 +163,6 @@ class TestGenerator(unittest.TestCase):
         assign_statement = main_body.statements[0]
         self.assertEqual(assign_statement.right.itype, "int")
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_read(self):
         with self.assertRaises(UndeclaredVariableError):
             ast = self.build_ast("{ read(m) }")
@@ -195,7 +186,6 @@ class TestGenerator(unittest.TestCase):
         read_statement = main_body.statements[0]
         # self.assertEqual(read_statement.result.itype, "int")
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_return(self):
         with self.assertRaises(UndeclaredVariableError):
             ast = self.build_ast("{ return o }")
@@ -219,7 +209,6 @@ class TestGenerator(unittest.TestCase):
         return_statement = main_body.statements[0]
         # self.assertEqual(return_statement.result.itype, "int")
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_if_condition(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -232,7 +221,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_if_true_block(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -245,7 +233,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_if_false_block(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -259,7 +246,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Inferred type for variables not implemented yet")
     def test_semantic_declared_variable_if(self):
         source_string = """
             int q, r, s;
@@ -280,7 +266,6 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(str(if_statement.body_true), "Block(Print(Variable(r)))")
         self.assertEqual(str(if_statement.body_else), "Block(Print(Variable(s)))")
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_while_condition(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -293,7 +278,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_while_block(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -306,7 +290,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Inferred type for variables not implemented yet")
     def test_semantic_declared_variable_while(self):
         source_string = """
             int t, u;
@@ -325,7 +308,6 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(if_statement.condition.itype, "bool")
         self.assertEqual(str(if_statement.body), "Block(Print(Variable(u)))")
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_statement_sequence(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -339,7 +321,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Inferred type for variables not implemented yet")
     def test_semantic_declared_variable_statement_sequence(self):
         source_string = """
             int v, w;
@@ -359,7 +340,6 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(print_statement.arg.itype, "int")
 
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_function_call(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -377,7 +357,6 @@ class TestGenerator(unittest.TestCase):
             result = analyzer.analyze(ast)
 
 
-    @unittest.skip("Semantic check for undeclared variables not implemented yet")
     def test_semantic_undeclared_variable_function_body(self):
         with self.assertRaises(UndeclaredVariableError):
             source_string = """
@@ -395,7 +374,6 @@ class TestGenerator(unittest.TestCase):
             result = analyzer.analyze(ast)
 
 
-    @unittest.skip("Semantic check for undeclared functions not implemented yet")
     def test_semantic_undeclared_function(self):
         with self.assertRaises(UndeclaredFunctionError):
             source_string = """
@@ -409,7 +387,6 @@ class TestGenerator(unittest.TestCase):
             analyzer = DLSemanticAnalyzer()
             result = analyzer.analyze(ast)
 
-    @unittest.skip("Semantic check for function signatures not implemented yet")
     def test_semantic_declared_function_wrong_number_arguments(self):
         with self.assertRaises(UndeclaredFunctionError):
             source_string = """
@@ -427,7 +404,6 @@ class TestGenerator(unittest.TestCase):
             result = analyzer.analyze(ast)
 
 
-    @unittest.skip("Inferred type for variables not implemented yet")
     def test_semantic_function_declaration_one_argument_one_variable(self):
         source_string = """
             /* Declare a function named 'bar', with one argument. */
@@ -447,7 +423,6 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(str(result.body), "Block(Assign(Variable(y), FunctionCall(bar, Arguments(Integer(5)))))")
 
 
-    @unittest.skip("Inferred type for variables not implemented yet")
     def test_semantic_function_declaration_with_variables(self):
         source_string = """
             /* Declare a function named 'baz', with a variable declaration. */
@@ -477,7 +452,6 @@ class TestGenerator(unittest.TestCase):
         self.assertEqual(str(func.body), "Block(Return(BinOp(PLUSOP, Variable(x), Integer(2))))")
 
 
-    @unittest.skip("Inferred type for variables not implemented yet")
     def test_semantic_code_example(self):
         source_file = open("tests/simple.dl",'r')
         source_string = source_file.read()
