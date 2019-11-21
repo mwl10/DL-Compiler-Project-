@@ -34,8 +34,9 @@ class DLSemanticAnalyzer(ASTVisitor):
         if symbol and (isinstance(symbol, VariableSymbol) or isinstance(symbol, ArgumentSymbol)):
             # set inferred type of the node to the symbol.type (is this right?)
             node.set_itype(symbol.type)
+            print("setting the itype here") ## not reaching this case
         else:
-            UndeclaredVariableError("Symbol not found or just isn't a VariableSymbol or ArgumentSymbol")
+            raise UndeclaredVariableError("Symbol not found or just isn't a VariableSymbol or ArgumentSymbol")
 
     def visit_ArrayIndex(self, node):
         """Call the semantic analyzer for ArrayIndex AST nodes."""
@@ -45,7 +46,7 @@ class DLSemanticAnalyzer(ASTVisitor):
         if symbol and isinstance(node.var.type, ArraySymbol):
             node.set_itype(symbol.type)
         else:
-            UndeclaredVariableError("Symbol not found or just isn't an ArraySymbol")
+            raise UndeclaredVariableError("Symbol not found or just isn't an ArraySymbol")
 
     # same as visit_assignOp??????????
     def visit_BinOp(self, node):
@@ -80,14 +81,14 @@ class DLSemanticAnalyzer(ASTVisitor):
         if nodeName and isinstance(nodeName, FunctionSymbol):
             node.set_itype('int')
         else:
-            UndeclaredFunctionError("Symbol not found, or the symbol isn't a FunctionSymbol")
+            raise UndeclaredFunctionError("Symbol not found, or the symbol isn't a FunctionSymbol")
         # node.args might be undefined so first instantiate a count variable to zero and compare
         count = 0
         if node.args:
             count = node.args.count()
             self.visit(node.args)
         if count != nodeName.args:
-            UndeclaredFunctionError("Number of arguments in the function call isn't the same ")
+            raise UndeclaredFunctionError("Number of arguments in the function call isn't the same ")
 
     def visit_Arguments(self, node):
         """Call the semantic analyzer for Arguments AST nodes."""
@@ -144,21 +145,16 @@ class DLSemanticAnalyzer(ASTVisitor):
         # iterate through node.variables
         for variable in node.variables:
             # check if the type of each declaration is 'variable' or 'arrayindex'
-            if isinstance(symbol_type, Variable):
+            if isinstance(variable, Variable):
                 # if the declaration is a variable, add symbol to the symbol table
-                self.st.add_var_symbol(symbol_type, Variable)    # argument types:  symbol_name, symbol_type
-            elif isinstance(symbol_type, ArrayIndex):
+                self.st.add_var_symbol(variable.name, symbol_type)    # argument types:  symbol_name, symbol_type
+            elif isinstance(variable, ArrayIndex):
                 # if the declaration is an ArrayIndex, add a symbol to the symbol table
-                self.st.add_array_symbol(symbol_type, ArrayIndex)  # argument types:  symbol_name, symbol_type, size
+                # how to count the size of an array?
+                self.st.add_array_symbol(variable.var.name, symbol_type)  # argument types:  symbol_name, symbol_type, size
 
     def visit_FunctionDeclaration(self, node):
         """Call the semantic analyzer for FunctionDeclaration AST nodes."""
-        #count = 0
-       # if node.args:
-        #    count = node.args.count()
-       #     self.visit(node.args)
-       # if count != nodeName.args:
-        #    UndeclaredFunctionError("Number of arguments in the function call isn't the same "
 
         arg_count = 0
         if node.args:
@@ -168,10 +164,13 @@ class DLSemanticAnalyzer(ASTVisitor):
         # create a new scope in the symbol table for the function
         self.st.enter_scope()
         # iterate through the args, and add each one to the symbol table
-        for arguments in node.args: #### node.args not iterable?
-            self.st.add_arg_symbol(arguments, ArgumentSymbol) # symbol_name, symbol_type
+        count = 0
+        if node.args.arguments:
+            count = node.args.arguments.count() #takes exactly one argument?
+        for argument in node.args.arguments:
+            self.st.add_arg_symbol(argument.name, ArgumentSymbol) # symbol_name, symbol_type
         # if there are any variable declarations for the function
-        if node.declarations:
+        if node.vars:
             self.visit(node.vars)
         self.visit(node.body)
         # exit the scope for the function
