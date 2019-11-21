@@ -1,9 +1,4 @@
-from dl.visitor import ASTVisitor
-from dl.symbols import SymbolTable, VariableSymbol, ArgumentSymbol, ArraySymbol, FunctionSymbol
-
-from dl.ast import Variable, ArrayIndex
-
-class DLSemanticAnalyzer(ASTVisitor):
+er(ASTVisitor):
     """Run semantic analysis on an AST.
 
     Traverse an abstract syntax tree (AST) with recursive descent, and
@@ -27,39 +22,15 @@ class DLSemanticAnalyzer(ASTVisitor):
 
     def visit_Variable(self, node):
         """Call the semantic analyzer for Variable AST nodes."""
-        # look up the node.name in the symbol table
-        symbol = self.st.find_symbol() # self , symbol name
-        # if the symbol is found, check
-        if symbol:
-            # if the symbol is found check if the returned symbol is a VariableSymbol or an ArguementSymbol
-            if isinstance() # symbol type, ' symbol name '
-
-            elif
-
-            else:
-
-   # self.st.enter_scope()
-    #if node.declarations:
-     #   self.visit(node.declarations)
- #   self.visit(node.body)
- #   self.st.exit_scope()
-
+        pass
 
     def visit_ArrayIndex(self, node):
         """Call the semantic analyzer for ArrayIndex AST nodes."""
         pass
-    # same as visit_assignOp??????????
+
     def visit_BinOp(self, node):
         """Call the semantic analyzer for BinOp AST nodes."""
-        self.visit(node.left)
-        self.visit(node.right)
-
-        # Check the types of the two arguments.
-        if node.left.itype == 'int' and node.right.itype == 'int':
-            node.set_itype('bool')
-        else:
-            raise TypeCheckError("Type of arguments to binary operator should be 'int': " + node.op)
-
+        pass
 
     def visit_RelOp(self, node):
         """Call the semantic analyzer for RelOp AST nodes."""
@@ -130,37 +101,12 @@ class DLSemanticAnalyzer(ASTVisitor):
     def visit_VariableDeclarations(self, node):
         """Call the semantic analyzer for VariableDeclarations AST nodes."""
         symbol_type = node.var_type.lower()
-        # iterate through node.variables
-        for variables in node.variables:
-            # check if the type of each declaration is 'variable' or 'arrayindex'
-            if isinstance(symbol_type, 'variable'):
-                # if the declaration is a variable, add symbol to the symbol table
-                self.st.add_var_symbol()    # argument types: self, symbol_name, symbol_type
-            elif isinstance(symbol_type, 'arrayindex'):
-                # if the declaration is an ArrayIndex, add a symbol to the symbol table
-                self.st.add_array_symbol()  # argument types: self, symbol_name, symbol_type, size
-
-
 
     def visit_FunctionDeclaration(self, node):
         """Call the semantic analyzer for FunctionDeclaration AST nodes."""
         arg_count = 0
         if node.args:
             arg_count = node.args.count()
-            # add a symbol to the symbol table for the function
-            self.st.add_func_symbol() #self, symbol_name, size how to get the name
-            # create a new scope in the symbol table for the function
-            self.st.enter_scope()
-            # iterate through the args, and add each one to the symbol table
-            for args in node.args:
-                self.st.add_arg_symbol() #self, symbol_name, symbol_type
-            # if there are any variable declarations for the function
-            if node.declarations:
-                self.visit(node.vars)
-            self.visit(node.body)
-            # exit the scope for the function
-            self.st.exit_scope()
-
 
     def visit_Program(self, node):
         """Call the semantic analyzer for Program AST nodes."""
