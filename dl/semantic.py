@@ -148,10 +148,11 @@ class DLSemanticAnalyzer(ASTVisitor):
             if isinstance(variable, Variable):
                 # if the declaration is a variable, add symbol to the symbol table
                 self.st.add_var_symbol(variable.name, symbol_type)    # argument types:  symbol_name, symbol_type
+                # putting symbol type here right?
             elif isinstance(variable, ArrayIndex):
                 # if the declaration is an ArrayIndex, add a symbol to the symbol table
                 # how to count the size of an array?
-                self.st.add_array_symbol(variable.var.name, symbol_type)  # argument types:  symbol_name, symbol_type, size
+                self.st.add_array_symbol(variable.var.name, symbol_type, variable.index)  # argument types:  symbol_name, symbol_type, size
 
     def visit_FunctionDeclaration(self, node):
         """Call the semantic analyzer for FunctionDeclaration AST nodes."""
@@ -164,9 +165,10 @@ class DLSemanticAnalyzer(ASTVisitor):
         # create a new scope in the symbol table for the function
         self.st.enter_scope()
         # iterate through the args, and add each one to the symbol table
-        count = 0
-        if node.args.arguments:
-            count = node.args.arguments.count() #takes exactly one argument?
+       # count = 0
+        #if node.args.arguments:
+        #    count = node.args.arguments.count() #takes exactly one argument?
+
         for argument in node.args.arguments:
             self.st.add_arg_symbol(argument.name, ArgumentSymbol) # symbol_name, symbol_type
         # if there are any variable declarations for the function
@@ -196,13 +198,13 @@ class SemanticError(Exception):
 
 class UndeclaredVariableError(SemanticError):
     """Exception raised for use of undeclared variables."""
-    pass
+
 
 class UndeclaredFunctionError(SemanticError):
     """Exception raised for use of undeclared function."""
-    pass
+
 
 
 class TypeCheckError(SemanticError):
     """Exception raised for type errors."""
-    pass
+
