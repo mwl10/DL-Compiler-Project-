@@ -1,6 +1,5 @@
 from dl.visitor import ASTVisitor
 from dl.symbols import SymbolTable, VariableSymbol, ArgumentSymbol, ArraySymbol, FunctionSymbol
-import sys
 from dl.ast import Variable, ArrayIndex
 
 class DLSemanticAnalyzer(ASTVisitor):
